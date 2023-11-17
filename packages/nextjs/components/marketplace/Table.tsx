@@ -10,9 +10,9 @@ const Table = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
-            <th></th>
+            <th>Address</th>
+            <th>Lister</th>
+            <th>Price</th>
           </tr>
         </thead>
         <tbody>
@@ -31,11 +31,7 @@ const Table = () => {
                   </div>
                 </div>
               </td>
-              <td>
-                {item.job}
-                <br />
-                <span className="badge badge-ghost badge-sm">Desktop Support Technician</span>
-              </td>
+              <td>{item.job}</td>
               <td>{item.favoriteColor}</td>
               <td>
                 <button className="btn btn-ghost btn-xs">details</button>
@@ -43,15 +39,6 @@ const Table = () => {
             </tr>
           ))}
         </tbody>
-        {/* foot */}
-        <tfoot>
-          <tr>
-            <th>Name</th>
-            <th>Job</th>
-            <th>Favorite Color</th>
-            <th></th>
-          </tr>
-        </tfoot>
       </table>
     </div>
   );
