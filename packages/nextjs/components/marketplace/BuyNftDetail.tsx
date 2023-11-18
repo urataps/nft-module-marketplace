@@ -58,7 +58,7 @@ export default function BuyNftDetail({ tokenId }: NftDetailProps) {
                     </Box>
 
                     <Box className="mt-4 space-x-2">
-                      <Button className="bg-green-500 text-white hover:bg-green-600">Buy Now</Button>
+                      <Button className="bg-green-500 text-white hover:bg-green-600 rounded-lg p-3">Buy Now</Button>
                     </Box>
                   </Box>
                 </Box>
