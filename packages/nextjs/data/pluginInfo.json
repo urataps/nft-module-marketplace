@@ -1,0 +1,74 @@
+[
+  {
+    "saleListingId": "57081013998943152096637164191531534892599600731533763981353977350048153632667",
+    "buyPrice": "100000000000000000",
+    "rentListingId": "81633505080633601366237973374196626644661979112186652847388360196251536897174",
+    "rentPricePerDay": "1000000000000000",
+    "deploymentResult": {
+      "address": "0x5d03e1Ddc067339d34f3B3E158846DBFDF1ACc29",
+      "name": "RelayPlugin",
+      "tokenId": "1",
+      "metadataURI": "ipfs://bafyreidypgn7ndh2eq2mcxuu5pqxbyggdp3ktyryx6gylkk2sejot7viyu/metadata.json",
+      "metadata": {
+        "image": {},
+        "name": "RelayPlugin",
+        "description": "This is a plugin that extends functionality of a Safe{WALLET}.",
+        "properties": {
+          "version": "1.0",
+          "source": "https://github.com",
+          "author": "Safe Team",
+          "requiresRootAccess": false,
+          "audits": [{ "auditor": "Satoshi Nakamoto", "url": "https://openzeppelin.com" }]
+        }
+      }
+    }
+  },
+  {
+    "saleListingId": "63332576436043850999598374494553956769703978510815881731273460831561206686556",
+    "buyPrice": "100000000000000000",
+    "rentListingId": "95343218262361255367308218335028021658401117304822732920289181687101751416438",
+    "rentPricePerDay": "1000000000000000",
+    "deploymentResult": {
+      "address": "0x88d4E2DE62Bf09078248b195CCB3c1D393555485",
+      "name": "RecoveryWithDelayPlugin",
+      "tokenId": "2",
+      "metadataURI": "ipfs://bafyreicr2nzmqsvq54gdlxix4kxkld4chu6pb24ze23sgftvvrl5rnjaiy/metadata.json",
+      "metadata": {
+        "image": {},
+        "name": "RecoveryWithDelayPlugin",
+        "description": "This is a plugin that extends functionality of a Safe{WALLET}.",
+        "properties": {
+          "version": "1.0",
+          "source": "https://github.com",
+          "author": "Safe Team",
+          "requiresRootAccess": false,
+          "audits": [{ "auditor": "Satoshi Nakamoto", "url": "https://openzeppelin.com" }]
+        }
+      }
+    }
+  },
+  {
+    "saleListingId": "11097298746883661123150513772182497394713787604831981570077452016786208026003",
+    "buyPrice": "100000000000000000",
+    "rentListingId": "39651304301635869944040879693101949254975557817350732241695949434600220713428",
+    "rentPricePerDay": "1000000000000000",
+    "deploymentResult": {
+      "address": "0x55B28C0c4EE0bbd31feE762D2013Ed65D164f327",
+      "name": "WhitelistPlugin",
+      "tokenId": "3",
+      "metadataURI": "ipfs://bafyreidto22nh3ovjl2smdlp2p4mmvcu2gzi6lbcexaqoobccn3kb6zvwu/metadata.json",
+      "metadata": {
+        "image": {},
+        "name": "WhitelistPlugin",
+        "description": "This is a plugin that extends functionality of a Safe{WALLET}.",
+        "properties": {
+          "version": "1.0",
+          "source": "https://github.com",
+          "author": "Safe Team",
+          "requiresRootAccess": false,
+          "audits": [{ "auditor": "Satoshi Nakamoto", "url": "https://openzeppelin.com" }]
+        }
+      }
+    }
+  }
+]

@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     Marketplace: {
-      address: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
+      address: "0x36C02dA8a0983159322a80FFE9F24b1acfF8B570",
       abi: [
         {
           inputs: [
@@ -21,8 +21,24 @@ const deployedContracts = {
           type: "constructor",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "AddressInsufficientBalance",
+          type: "error",
+        },
+        {
           inputs: [],
           name: "AlreadyListed",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "FailedInnerCall",
           type: "error",
         },
         {
@@ -84,7 +100,7 @@ const deployedContracts = {
           ],
           name: "buy",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
         {
@@ -118,11 +134,6 @@ const deployedContracts = {
                   internalType: "enum IMarketplace.ListingType",
                   name: "listingType",
                   type: "uint8",
-                },
-                {
-                  internalType: "address",
-                  name: "currency",
-                  type: "address",
                 },
                 {
                   internalType: "uint256",
@@ -184,11 +195,6 @@ const deployedContracts = {
                   type: "uint256",
                 },
                 {
-                  internalType: "address",
-                  name: "currency",
-                  type: "address",
-                },
-                {
                   internalType: "enum IMarketplace.ListingStatus",
                   name: "status",
                   type: "uint8",
@@ -220,11 +226,6 @@ const deployedContracts = {
                   internalType: "enum IMarketplace.ListingType",
                   name: "listingType",
                   type: "uint8",
-                },
-                {
-                  internalType: "address",
-                  name: "currency",
-                  type: "address",
                 },
                 {
                   internalType: "uint256",
@@ -286,7 +287,7 @@ const deployedContracts = {
           ],
           name: "rent",
           outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "payable",
           type: "function",
         },
       ],
@@ -1320,6 +1321,301 @@ const deployedContracts = {
     },
   },
   11155111: {
+    Marketplace: {
+      address: "0x4d1024a0a5Ca67A76b7C7cb010638c5E98F595Bc",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_moduleCollection",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "AddressInsufficientBalance",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "AlreadyListed",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "FailedInnerCall",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "InsufficientBalance",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NotCancelled",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NotCreated",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NotLoan",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NotOwner",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NotSale",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "enum IMarketplace.ListingStatus",
+              name: "status",
+              type: "uint8",
+            },
+          ],
+          name: "ListingStatusChanged",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+          ],
+          name: "buy",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+          ],
+          name: "cancel",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "moduleId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "enum IMarketplace.ListingType",
+                  name: "listingType",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "price",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "nonce",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct IMarketplace.ListingParameters",
+              name: "params",
+              type: "tuple",
+            },
+          ],
+          name: "computeListingId",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+          ],
+          name: "getListing",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "moduleId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "enum IMarketplace.ListingType",
+                  name: "listingType",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "price",
+                  type: "uint256",
+                },
+                {
+                  internalType: "enum IMarketplace.ListingStatus",
+                  name: "status",
+                  type: "uint8",
+                },
+              ],
+              internalType: "struct IMarketplace.Listing",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "moduleId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "enum IMarketplace.ListingType",
+                  name: "listingType",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "price",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "nonce",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct IMarketplace.ListingParameters",
+              name: "params",
+              type: "tuple",
+            },
+          ],
+          name: "list",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "moduleCollection",
+          outputs: [
+            {
+              internalType: "contract ModuleCollection",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "listingId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "moduleUser",
+              type: "address",
+            },
+            {
+              internalType: "uint64",
+              name: "duration",
+              type: "uint64",
+            },
+          ],
+          name: "rent",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        buy: "contracts/IMarketplace.sol",
+        cancel: "contracts/IMarketplace.sol",
+        computeListingId: "contracts/IMarketplace.sol",
+        getListing: "contracts/IMarketplace.sol",
+        list: "contracts/IMarketplace.sol",
+        moduleCollection: "contracts/IMarketplace.sol",
+        rent: "contracts/IMarketplace.sol",
+      },
+    },
     MockPlugin: {
       address: "0x4b2702F4cAA3F41b6491Ef18097E3d0d9802b17E",
       abi: [
@@ -1345,7 +1641,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     ModuleCollection: {
-      address: "0xD3Ac926b4a4F2b4BfC088D01Fb5B0E46DE727E72",
+      address: "0xC4ac5F8DA7cF902b29b90C170f7d06A2c852967C",
       abi: [
         {
           inputs: [
@@ -1621,6 +1917,12 @@ const deployedContracts = {
               internalType: "address",
               name: "module",
               type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
             },
           ],
           name: "ModuleAdded",

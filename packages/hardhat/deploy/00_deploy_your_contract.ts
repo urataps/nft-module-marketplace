@@ -1,8 +1,17 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { DeployPluginResult, deployPlugin } from "../tasks/modules";
-import { ModuleCollection } from "../typechain-types";
+import { Marketplace, ModuleCollection } from "../typechain-types";
 import { writeFileSync } from "fs";
+import { parseEther } from "ethers/lib/utils";
+
+export type PluginInfo = {
+  saleListingId: string;
+  buyPrice: string;
+  rentListingId: string;
+  rentPricePerDay: string;
+  deploymentResult: DeployPluginResult;
+};
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -24,6 +33,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
   const pluginDeployResults: DeployPluginResult[] = [];
+  const pluginInfo: PluginInfo[] = [];
 
   await deploy("ModuleCollection", {
     from: deployer,
@@ -48,8 +58,40 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
-  console.log(pluginDeployResults);
-  writeFileSync("deployResults.json", JSON.stringify(pluginDeployResults), "utf-8");
+  const marketplace = (await hre.ethers.getContract("Marketplace", deployer)) as Marketplace;
+
+  for (const pluginDeployInfo of pluginDeployResults) {
+    const saleParams = {
+      moduleId: pluginDeployInfo.tokenId,
+      owner: deployer,
+      listingType: 0,
+      price: parseEther("0.1"),
+      nonce: 0,
+    };
+    const rentParams = {
+      moduleId: pluginDeployInfo.tokenId,
+      owner: deployer,
+      listingType: 1,
+      price: parseEther("0.001"),
+      nonce: 0,
+    };
+
+    const saleListingId = await marketplace.computeListingId(saleParams);
+    const rentListingId = await marketplace.computeListingId(rentParams);
+    await marketplace.list(saleParams);
+    await marketplace.list(rentParams);
+
+    pluginInfo.push({
+      saleListingId: saleListingId.toString(),
+      buyPrice: saleParams.price.toString(),
+      rentListingId: rentListingId.toString(),
+      rentPricePerDay: rentParams.price.toString(),
+      deploymentResult: pluginDeployInfo,
+    });
+  }
+
+  console.log(pluginInfo);
+  writeFileSync("pluginInfo.json", JSON.stringify(pluginInfo), "utf-8");
 };
 
 export default deployYourContract;
