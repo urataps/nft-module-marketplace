@@ -3,7 +3,7 @@ import Link from "next/link";
 import data from "../../data/data.json";
 import { SafeGlobalLogo } from "../assets/SafeGlobalLogo";
 
-const Table = () => {
+const BuyTable = () => {
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -32,7 +32,7 @@ const Table = () => {
               <td>{item.address}</td>
               <td>{item.price}</td>
               <td>
-                <Link href={`/token/${item.tokenId}`}>
+                <Link href={`/buy/${item.tokenId}`}>
                   <button className="btn btn-primary">Details</button>
                 </Link>
               </td>
@@ -44,4 +44,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default BuyTable;

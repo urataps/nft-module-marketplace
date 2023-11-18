@@ -32,7 +32,7 @@ const RentTable = () => {
               <td>{item.address}</td>
               <td>{item.rentingPrice}</td>
               <td>
-                <Link href={`/token/${item.tokenId}`}>
+                <Link href={`/rent/${item.tokenId}`}>
                   <button className="btn btn-primary">Details</button>
                 </Link>
               </td>

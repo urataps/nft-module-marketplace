@@ -11,10 +11,7 @@ type NftDetailProps = {
   tokenId: string;
 };
 
-export default function NftDetail({ tokenId }: NftDetailProps) {
-  // Sample price, replace with the actual price for the NFT
-  const nftPrice = "$500.00";
-
+export default function RentNftDetail({ tokenId }: NftDetailProps) {
   return (
     <>
       <Box>
@@ -49,17 +46,6 @@ export default function NftDetail({ tokenId }: NftDetailProps) {
                 </Box>
 
                 <Box className="mt-6">
-                  <Text className="text-lg font-semibold">Owner</Text>
-                  <SimpleGrid columns={12} columnGap={5} rowGap={2}>
-                    <GridItem colSpan={[12]}>
-                      <Box>
-                        <span className="text-blue-500">urataps.eth</span>
-                      </Box>
-                    </GridItem>
-                  </SimpleGrid>
-                </Box>
-
-                <Box className="mt-6">
                   <Box className="mb-4">
                     <Text className="text-lg font-semibold">Rent price</Text>
                     <Heading as={"h3"} className="text-2xl font-bold text-blue-500">
@@ -67,12 +53,6 @@ export default function NftDetail({ tokenId }: NftDetailProps) {
                     </Heading>
                   </Box>
                   <Box>
-                    <Box className="mb-2">
-                      <Text className="text-lg font-semibold">Buy price</Text>
-                      <Heading as={"h3"} className="text-2xl font-bold text-green-500">
-                        {nftPrice}
-                      </Heading>
-                    </Box>
                     <Box>
                       <span className="text-lg">Duration</span>
                       <Select className="w-full mt-2 p-2 border rounded-md" placeholder="Select option">
@@ -83,7 +63,6 @@ export default function NftDetail({ tokenId }: NftDetailProps) {
                     </Box>
                     <Box className="mt-4 space-x-2">
                       <Button className="bg-blue-500 text-white hover:bg-blue-600">Rent Now</Button>
-                      <Button className="bg-green-500 text-white hover:bg-green-600">Buy Now</Button>
                     </Box>
                   </Box>
                 </Box>

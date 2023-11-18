@@ -1,16 +1,16 @@
 import React from "react";
 import { useRouter } from "next/router";
-import RentNftDetail from "~~/components/marketplace/RentNftDetail";
+import BuyNftDetail from "~~/components/marketplace/BuyNftDetail";
 
-const NftDetailPage = () => {
+const BuyNftDetailPage = () => {
   const router = useRouter();
   const { tokenId } = router.query as { tokenId: string };
 
   return (
     <div>
-      <RentNftDetail tokenId={tokenId} />
+      <BuyNftDetail tokenId={tokenId} />
     </div>
   );
 };
 
-export default NftDetailPage;
+export default BuyNftDetailPage;
