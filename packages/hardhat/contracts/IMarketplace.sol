@@ -21,7 +21,6 @@ interface IMarketplace {
 		address owner;
 		ListingType listingType;
 		uint256 price; // pricePerDay if type is loan
-		uint256 nonce;
 	}
 
 	struct Listing {

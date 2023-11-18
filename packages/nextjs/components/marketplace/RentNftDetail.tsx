@@ -7,6 +7,8 @@ import { Box, Button, Flex } from "@chakra-ui/react";
 import { Container } from "@chakra-ui/react";
 import { GridItem, Heading, Select, SimpleGrid, Text } from "@chakra-ui/react";
 import { formatUnits } from "viem";
+import { useWalletClient } from "wagmi";
+import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 
 type NftDetailProps = {
   tokenId: string;
@@ -17,6 +19,22 @@ export default function RentNftDetail({ tokenId }: NftDetailProps) {
   if (!pluginInfo) {
     throw new Error(`No plugin found with tokenId ${tokenId}`);
   }
+
+  const { data: walletClient } = useWalletClient();
+  const { data: marketplace } = useScaffoldContract({
+    contractName: "Marketplace",
+    walletClient,
+  });
+
+  const listingId = BigInt(pluginInfo.rentListingId);
+
+  const rent = async () => {
+    if (marketplace && walletClient) {
+      await marketplace.write.rent([listingId, walletClient.account.address, 10n], {
+        value: BigInt(pluginInfo.buyPrice),
+      });
+    }
+  };
 
   return (
     <>
@@ -76,7 +94,9 @@ export default function RentNftDetail({ tokenId }: NftDetailProps) {
                         </Select>
                       </Box>
                       <Box className="mt-4 ml-4">
-                        <Button className="bg-blue-500 text-white hover:bg-blue-600 rounded-lg p-4">Rent Now</Button>
+                        <Button onClick={rent} className="bg-blue-500 text-white hover:bg-blue-600 rounded-lg p-4">
+                          Rent Now
+                        </Button>
                       </Box>
                     </Flex>
                   </Box>

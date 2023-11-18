@@ -54,7 +54,7 @@ contract Marketplace is IMarketplace {
 		if (listing.listingType != ListingType.SALE) revert NotSale();
 		if (msg.value < listing.price) revert InsufficientBalance();
 
-		_listings[listingId].status = ListingStatus.COMPLETED;
+		// _listings[listingId].status = ListingStatus.COMPLETED;
 
 		emit ListingStatusChanged(listingId, ListingStatus.COMPLETED);
 
@@ -80,7 +80,7 @@ contract Marketplace is IMarketplace {
 		uint256 rentPrice = (listing.price * duration) / 1 days;
 		if (msg.value < rentPrice) revert InsufficientBalance();
 
-		_listings[listingId].status = ListingStatus.COMPLETED;
+		// _listings[listingId].status = ListingStatus.COMPLETED;
 
 		emit ListingStatusChanged(listingId, ListingStatus.COMPLETED);
 

@@ -7,6 +7,8 @@ import { Box, Button } from "@chakra-ui/react";
 import { Container } from "@chakra-ui/react";
 import { GridItem, Heading, SimpleGrid, Text } from "@chakra-ui/react";
 import { formatUnits } from "viem";
+import { useWalletClient } from "wagmi";
+import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 
 type NftDetailProps = {
   tokenId: string;
@@ -17,6 +19,20 @@ export default function BuyNftDetail({ tokenId }: NftDetailProps) {
   if (!pluginInfo) {
     throw new Error(`No plugin found with tokenId ${tokenId}`);
   }
+
+  const { data: walletClient } = useWalletClient();
+  const { data: marketplace } = useScaffoldContract({
+    contractName: "Marketplace",
+    walletClient,
+  });
+
+  const listingId = BigInt(pluginInfo.saleListingId);
+
+  const buy = async () => {
+    if (marketplace) {
+      await marketplace.write.buy([listingId], { value: BigInt(pluginInfo.buyPrice) });
+    }
+  };
 
   return (
     <>
@@ -68,8 +84,10 @@ export default function BuyNftDetail({ tokenId }: NftDetailProps) {
                     </Box>
 
                     <Box className="mt-4 text-center">
-                      {/* todo: add onClick action */}
-                      <Button className="bg-green-500 text-white hover:bg-green-600 rounded-lg px-6 py-3 text-xl">
+                      <Button
+                        onClick={buy}
+                        className="bg-green-500 text-white hover:bg-green-600 rounded-lg px-6 py-3 text-xl"
+                      >
                         Buy Now
                       </Button>
                     </Box>

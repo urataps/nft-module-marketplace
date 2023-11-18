@@ -60,6 +60,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const marketplace = (await hre.ethers.getContract("Marketplace", deployer)) as Marketplace;
 
+  await collection.setApprovalForAll(marketplace.address, true);
+
   for (const pluginDeployInfo of pluginDeployResults) {
     const saleParams = {
       moduleId: pluginDeployInfo.tokenId,
