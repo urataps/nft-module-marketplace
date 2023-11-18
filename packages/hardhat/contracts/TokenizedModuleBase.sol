@@ -29,4 +29,13 @@ abstract contract TokenizedModuleBase {
 		);
 		_;
 	}
+
+	modifier onlyRented(address user) {
+		uint256 moduleId = _moduleRegistry.getModuleId(_this);
+		require(
+			_moduleRegistry.usableBalanceOf(user, moduleId) > 0,
+			"Module not rented"
+		);
+		_;
+	}
 }

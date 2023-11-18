@@ -1,8 +1,26 @@
 import React from "react";
+import Link from "next/link";
 import data from "../../data/data.json";
 import { SafeGlobalLogo } from "../assets/SafeGlobalLogo";
 
 const Table = () => {
+  // const [totalModules, setTotalModules] = React.useState<bigint>();
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   const fetchModuleSupply = async () => {
+  //     const totalSupply = await contract?.read.totalModules();
+  //     setTotalModules(totalSupply);
+  //   };
+  //   fetchModuleSupply();
+  // }, []);
+
+  // const { data: walletClient } = useWalletClient();
+  // const { data: contract } = useScaffoldContract({
+  //   contractName: "ModuleCollection",
+  //   walletClient: walletClient,
+  // });
+
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -11,8 +29,8 @@ const Table = () => {
           <tr>
             <th>Name</th>
             <th>Address</th>
-            <th>Lister</th>
-            <th>Price</th>
+            <th>Buy Price</th>
+            <th>Rent Price</th>
           </tr>
         </thead>
         <tbody>
@@ -25,16 +43,16 @@ const Table = () => {
                       <SafeGlobalLogo />
                     </div>
                   </div>
-                  <div>
-                    <div className="font-bold">{item.name}</div>
-                    <div className="text-sm opacity-50">{item.location}</div>
-                  </div>
+                  <div className="font-bold">{item.name}</div>
                 </div>
               </td>
-              <td>{item.job}</td>
-              <td>{item.favoriteColor}</td>
+              <td>{item.address}</td>
+              <td>{item.price}</td>
+              <td>{item.rentingPrice}</td>
               <td>
-                <button className="btn btn-ghost btn-xs">details</button>
+                <Link href={`/token/${item.address}`}>
+                  <button className="btn btn-primary">Details</button>
+                </Link>
               </td>
             </tr>
           ))}

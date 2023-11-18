@@ -1,26 +1,30 @@
 [
   {
-    "name": "Hart Hagerty",
-    "job": "Desktop Support Technician",
-    "favoriteColor": "Purple",
-    "location": "United States"
+    "name": "RelayPlugin",
+    "address": "0x3f5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE",
+    "lister": "Red",
+    "rentingPrice": "0.02 ETH/day",
+    "price": "0.2 ETH"
   },
   {
-    "name": "Brice Swyre",
-    "job": "Tax Accountant",
-    "favoriteColor": "Red",
-    "location": "China"
+    "name": "RecoverPlugin",
+    "address": "0x53d284357ec70cE289D6D64134DfAc8E511c8a3D",
+    "lister": "Crimson",
+    "rentingPrice": "0.03 ETH/day",
+    "price": "0.3 ETH"
   },
   {
-    "name": "Marjy Ferencz",
-    "job": "Office Assistant I",
-    "favoriteColor": "Crimson",
-    "location": "Russia"
+    "name": "WhitelistPlugin",
+    "address": "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    "lister": "Indigo",
+    "rentingPrice": "0.04 ETH/day",
+    "price": "0.4 ETH"
   },
   {
-    "name": "Yancy Tear",
-    "job": "Community Outreach Specialist",
-    "favoriteColor": "Indigo",
-    "location": "Brazil"
+    "name": "MockPlugin",
+    "address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+    "lister": "Purple",
+    "rentingPrice": "0.01 ETH/day",
+    "price": "0.1 ETH"
   }
 ]

@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { deployRelayPluginMetadata } from "../tasks/modules";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -21,7 +22,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("YourContract", {
+  await deploy("ModuleCollection", {
     from: deployer,
     // Contract constructor arguments
     args: [deployer],
@@ -31,8 +32,28 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
-  // Get the deployed contract
-  // const yourContract = await hre.ethers.getContract("YourContract", deployer);
+  const collection = await hre.ethers.getContract("ModuleCollection", deployer);
+
+  await deploy("MockPlugin", {
+    from: deployer,
+    log: true,
+    autoMine: true,
+  });
+
+  const relayPlugin = await hre.ethers.getContract("MockPlugin", deployer);
+  const relayPluginURI = await deployRelayPluginMetadata();
+
+  await collection.addModule(relayPlugin.address, relayPluginURI, {
+    recipient: deployer,
+    royaltyBps: "100", // 1%
+  });
+
+  await deploy("Marketplace", {
+    from: deployer,
+    args: [collection.address],
+    log: true,
+    autoMine: true,
+  });
 };
 
 export default deployYourContract;

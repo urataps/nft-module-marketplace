@@ -80,6 +80,7 @@ contract ModuleCollection is
 		_mint(to, moduleId, amount, "");
 	}
 
+	/// @inheritdoc ISafeProtocolRegistry
 	function check(
 		address module
 	) external view returns (uint64 listedAt, uint64 flaggedAt) {
