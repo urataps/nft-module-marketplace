@@ -1,12 +1,12 @@
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
-import Table from "~~/components/marketplace/Table";
+import BuyTable from "~~/components/marketplace/BuyTable";
 
 const Home: NextPage = () => {
   return (
     <>
       <MetaHeader />
-      <Table />
+      <BuyTable />
     </>
   );
 };

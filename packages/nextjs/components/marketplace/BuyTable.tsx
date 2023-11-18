@@ -7,14 +7,12 @@ const Table = () => {
   return (
     <div className="overflow-x-auto">
       <table className="table">
-        {/* head */}
         <thead>
           <tr>
-            <th>tokenId</th>
+            <th>ID</th>
             <th>Name</th>
             <th>Address</th>
             <th>Buy Price</th>
-            <th>Rent Price</th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +31,6 @@ const Table = () => {
               </td>
               <td>{item.address}</td>
               <td>{item.price}</td>
-              <td>{item.rentingPrice}</td>
               <td>
                 <Link href={`/token/${item.tokenId}`}>
                   <button className="btn btn-primary">Details</button>

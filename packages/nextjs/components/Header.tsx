@@ -15,13 +15,13 @@ interface HeaderMenuLink {
 
 export const menuLinks: HeaderMenuLink[] = [
   {
-    label: "Marketplace",
+    label: "Buy",
     href: "/",
     icon: <MarketplaceIcon />,
   },
   {
-    label: "Inventory",
-    href: "/inventory", // todo: add inventory page
+    label: "Rent",
+    href: "/rent",
     icon: <InventoryIcon />,
   },
 ];
