@@ -4,6 +4,7 @@ pragma solidity 0.8.21;
 import { ERC1155URIStorage, ERC1155 } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 import { IERC2981 } from "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import { ISafeProtocolRegistry } from "@safe-global/safe-core-protocol/contracts/interfaces/Registry.sol";
 import { IERC5006 } from "./IERC5006.sol";
 import { IModuleCollection } from "./IModuleCollection.sol";
 
@@ -11,6 +12,7 @@ contract ModuleCollection is
 	IModuleCollection,
 	IERC2981,
 	IERC5006,
+	ISafeProtocolRegistry,
 	ERC1155URIStorage,
 	Ownable
 {
@@ -30,6 +32,7 @@ contract ModuleCollection is
 	mapping(address => uint256) private _moduleIds;
 	mapping(uint256 => address) private _moduleAddresses;
 	mapping(uint256 => RoyaltyInfo) private _royaltyInfos;
+	mapping(address => ModuleTimestampts) private _moduleTimestamps;
 
 	// Module renting variables
 	mapping(uint256 => UserRecord) private _records;
@@ -51,6 +54,7 @@ contract ModuleCollection is
 		_moduleIds[module] = moduleId;
 		_moduleAddresses[moduleId] = module;
 		_royaltyInfos[moduleId] = info;
+		_moduleTimestamps[module].listedAt = uint64(block.timestamp);
 		_setURI(moduleId, moduleUri);
 
 		emit ModuleAdded(module);
@@ -60,7 +64,7 @@ contract ModuleCollection is
 		uint256 moduleId = _moduleIds[module];
 		if (moduleId == 0) revert ModuleNotFound();
 
-		delete _moduleAddresses[moduleId];
+		_moduleTimestamps[module].flaggedAt = uint64(block.timestamp);
 
 		emit ModuleFlagged(module);
 	}
@@ -74,6 +78,13 @@ contract ModuleCollection is
 		if (_moduleAddresses[moduleId] == address(0)) revert ModuleNotFound();
 
 		_mint(to, moduleId, amount, "");
+	}
+
+	function check(
+		address module
+	) external view returns (uint64 listedAt, uint64 flaggedAt) {
+		ModuleTimestampts memory timestamps = _moduleTimestamps[module];
+		return (timestamps.listedAt, timestamps.flaggedAt);
 	}
 
 	/// @inheritdoc IERC5006
@@ -162,10 +173,6 @@ contract ModuleCollection is
 		RoyaltyInfo memory info = _royaltyInfos[moduleId];
 		recipient = info.recipient;
 		royaltyAmount = (salePrice * info.royaltyBps) / 10000;
-	}
-
-	function isModuleFlagged(address module) public view returns (bool) {
-		return _moduleAddresses[_moduleIds[module]] == address(0);
 	}
 
 	function unfrozenBalanceOf(

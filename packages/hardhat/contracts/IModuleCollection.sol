@@ -7,6 +7,11 @@ interface IModuleCollection {
 		uint96 royaltyBps;
 	}
 
+	struct ModuleTimestampts {
+		uint64 listedAt;
+		uint64 flaggedAt;
+	}
+
 	event ModuleAdded(address indexed module);
 	event ModuleFlagged(address indexed module);
 
@@ -27,8 +32,6 @@ interface IModuleCollection {
 	function getModuleAddress(
 		uint256 moduleId
 	) external view returns (address module);
-
-	function isModuleFlagged(address module) external view returns (bool);
 
 	function unfrozenBalanceOf(
 		address owner,
