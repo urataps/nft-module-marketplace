@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import data from "../../data/data.json";
+import data from "../../data/pluginInfo.json";
 import { SafeGlobalLogo } from "../assets/SafeGlobalLogo";
+import { formatUnits } from "viem";
 
 const BuyTable = () => {
   return (
@@ -18,7 +19,7 @@ const BuyTable = () => {
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
-              <td>{item.tokenId}</td>
+              <td>{item.deploymentResult.tokenId}</td>
               <td>
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -26,13 +27,13 @@ const BuyTable = () => {
                       <SafeGlobalLogo />
                     </div>
                   </div>
-                  <div className="font-bold">{item.name}</div>
+                  <div className="font-bold">{item.deploymentResult.name}</div>
                 </div>
               </td>
-              <td>{item.address}</td>
-              <td>{item.price}</td>
+              <td>{item.deploymentResult.address}</td>
+              <td>{formatUnits(BigInt(item.buyPrice), 18)} ETH</td>
               <td>
-                <Link href={`/buy/${item.tokenId}`}>
+                <Link href={`/buy/${item.deploymentResult.tokenId}`}>
                   <button className="btn btn-primary">Details</button>
                 </Link>
               </td>

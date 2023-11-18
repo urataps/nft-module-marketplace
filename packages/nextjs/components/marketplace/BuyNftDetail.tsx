@@ -1,19 +1,22 @@
 import React from "react";
 import Link from "next/link";
-import data from "../../data/data.json";
+import data from "../../data/pluginInfo.json";
 import { SafeGlobalLogo } from "../assets/SafeGlobalLogo";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Box, Button } from "@chakra-ui/react";
 import { Container } from "@chakra-ui/react";
 import { GridItem, Heading, SimpleGrid, Text } from "@chakra-ui/react";
+import { formatUnits } from "viem";
 
 type NftDetailProps = {
   tokenId: string;
 };
 
 export default function BuyNftDetail({ tokenId }: NftDetailProps) {
-  // Sample price, replace with the actual price for the NFT
-  const nftPrice = "$500.00";
+  const pluginInfo = data.find(item => item.deploymentResult.tokenId === tokenId);
+  if (!pluginInfo) {
+    throw new Error(`No plugin found with tokenId ${tokenId}`);
+  }
 
   return (
     <>
@@ -33,32 +36,42 @@ export default function BuyNftDetail({ tokenId }: NftDetailProps) {
 
               <GridItem colSpan={[10, 10, 10, 6]}>
                 <Heading as="h2" className="text-3xl font-semibold">
-                  {data.find(item => item.tokenId === tokenId)?.name}
+                  {pluginInfo.deploymentResult.name}
                 </Heading>
-                <Text className="text-gray-600 mt-4">
-                  Descriptione cabrone
-                  {/* todo: remove */}
-                </Text>
+                <Text className="text-gray-600 mt-4">{pluginInfo.deploymentResult.metadata.description}</Text>
 
                 <Box className="mt-6">
-                  <Text className="text-lg font-semibold">Metadata</Text>
-                  <SimpleGrid columns={12} columnGap={5} rowGap={2}>
-                    <GridItem colSpan={[12, 6, 6, 6]}>Something</GridItem>
-                    <GridItem colSpan={[12, 6, 6, 6]}>Something</GridItem>
-                  </SimpleGrid>
+                  <Text className="text-lg font-semibold">Plugin Metadata</Text>
+                  <div className="border border-gray-300 p-4 rounded-lg">
+                    <div className="grid grid-cols-2 gap-4">
+                      {Object.entries(pluginInfo.deploymentResult.metadata.properties).map(([key, value], index) => (
+                        <div key={index} className="mb-4">
+                          <div className="font-semibold">{key}</div>
+                          <div>{value.toString()}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </Box>
 
                 <Box className="mt-6">
                   <Box>
-                    <Box className="mb-2">
-                      <Text className="text-lg font-semibold">Buy price</Text>
-                      <Heading as={"h3"} className="text-2xl font-bold text-green-500">
-                        {nftPrice}
-                      </Heading>
+                    <Box className="mb-2 flex justify-between items-center">
+                      <div>
+                        <Text className="text-lg font-semibold">Buy Price</Text>
+                      </div>
+                      <div>
+                        <Heading as={"h3"} className="text-2xl font-bold text-green-500">
+                          {formatUnits(BigInt(pluginInfo.buyPrice), 18)} ETH
+                        </Heading>
+                      </div>
                     </Box>
 
-                    <Box className="mt-4 space-x-2">
-                      <Button className="bg-green-500 text-white hover:bg-green-600 rounded-lg p-3">Buy Now</Button>
+                    <Box className="mt-4 text-center">
+                      {/* todo: add onClick action */}
+                      <Button className="bg-green-500 text-white hover:bg-green-600 rounded-lg px-6 py-3 text-xl">
+                        Buy Now
+                      </Button>
                     </Box>
                   </Box>
                 </Box>

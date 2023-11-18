@@ -9,10 +9,7 @@ export type ModuleProperties = {
   author: string;
   requiresRootAccess: boolean;
   version: string;
-  audits: {
-    auditor: string;
-    url: string;
-  }[];
+  audit: string;
 };
 
 export type NftMetadata = {
@@ -49,15 +46,10 @@ export const deployPlugin = async (
     description: "This is a plugin that extends functionality of a Safe{WALLET}.",
     properties: {
       version: "1.0",
-      source: "https://github.com",
+      source: "https://github.com/5afe/safe-core-protocol-demo",
       author: "Safe Team",
       requiresRootAccess: false,
-      audits: [
-        {
-          auditor: "Satoshi Nakamoto",
-          url: "https://openzeppelin.com",
-        },
-      ],
+      audit: "https://www.openzeppelin.com/security-audits",
     },
   };
 
