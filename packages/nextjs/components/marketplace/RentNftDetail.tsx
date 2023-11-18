@@ -30,8 +30,8 @@ export default function RentNftDetail({ tokenId }: NftDetailProps) {
 
   const rent = async () => {
     if (marketplace && walletClient) {
-      await marketplace.write.rent([listingId, walletClient.account.address, 10n], {
-        value: BigInt(pluginInfo.buyPrice),
+      await marketplace.write.rent([listingId, walletClient.account.address, 1n], {
+        value: BigInt(pluginInfo.rentPricePerDay),
       });
     }
   };

@@ -102,7 +102,7 @@ contract ModuleCollection is
 		if (unfrozenBalanceOf(owner, moduleId) == 0) {
 			revert InsufficientBalance();
 		}
-		recordId = _computeRecordId(user, moduleId);
+		recordId = computeRecordId(user, moduleId);
 		if (_records[recordId].tokenId != 0) revert RecordAlreadyExists();
 
 		_records[recordId] = UserRecord({
@@ -134,7 +134,7 @@ contract ModuleCollection is
 		uint256 moduleId
 	) external view returns (uint256) {
 		return
-			_records[_computeRecordId(user, moduleId)].expiry >= block.timestamp
+			_records[computeRecordId(user, moduleId)].expiry >= block.timestamp
 				? 1
 				: 0;
 	}
@@ -210,10 +210,10 @@ contract ModuleCollection is
 		super._update(from, to, ids, amounts);
 	}
 
-	function _computeRecordId(
+	function computeRecordId(
 		address user,
 		uint256 moduleId
-	) internal pure returns (uint256) {
+	) public pure returns (uint256) {
 		return uint256(keccak256(abi.encodePacked(user, moduleId)));
 	}
 }

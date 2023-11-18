@@ -72,12 +72,13 @@ contract Marketplace is IMarketplace {
 	function rent(
 		uint256 listingId,
 		address moduleUser,
-		uint64 duration
+		uint64 durationDays
 	) external payable {
 		Listing memory listing = _listings[listingId];
 		if (listing.status != ListingStatus.CREATED) revert NotCreated();
 		if (listing.listingType != ListingType.LOAN) revert NotLoan();
-		uint256 rentPrice = (listing.price * duration) / 1 days;
+		// price is pricePerDay
+		uint256 rentPrice = listing.price * durationDays;
 		if (msg.value < rentPrice) revert InsufficientBalance();
 
 		// _listings[listingId].status = ListingStatus.COMPLETED;
@@ -91,7 +92,7 @@ contract Marketplace is IMarketplace {
 			moduleUser,
 			listing.moduleId,
 			1,
-			uint64(block.timestamp) + duration
+			uint64(block.timestamp) + durationDays * 1 days
 		);
 
 		// todo: refund excess

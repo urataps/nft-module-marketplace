@@ -47,16 +47,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const collection = (await hre.ethers.getContract("ModuleCollection", deployer)) as ModuleCollection;
 
-  pluginDeployResults.push(await deployPlugin(hre, "RelayPlugin", collection));
-  pluginDeployResults.push(await deployPlugin(hre, "RecoveryWithDelayPlugin", collection));
-  pluginDeployResults.push(await deployPlugin(hre, "WhitelistPlugin", collection));
-
   await deploy("Marketplace", {
     from: deployer,
     args: [collection.address],
     log: true,
     autoMine: true,
   });
+
+  pluginDeployResults.push(await deployPlugin(hre, "RelayPlugin", collection));
+  pluginDeployResults.push(await deployPlugin(hre, "RecoveryWithDelayPlugin", collection));
+  pluginDeployResults.push(await deployPlugin(hre, "WhitelistPlugin", collection));
 
   const marketplace = (await hre.ethers.getContract("Marketplace", deployer)) as Marketplace;
 
@@ -68,14 +68,12 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
       owner: deployer,
       listingType: 0,
       price: parseEther("0.1"),
-      nonce: 0,
     };
     const rentParams = {
       moduleId: pluginDeployInfo.tokenId,
       owner: deployer,
       listingType: 1,
-      price: parseEther("0.001"),
-      nonce: 0,
+      price: parseEther("0.0001"),
     };
 
     const saleListingId = await marketplace.computeListingId(saleParams);

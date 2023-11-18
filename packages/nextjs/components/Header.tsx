@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { InventoryIcon, MarketplaceIcon } from "./assets/Icons";
+import { InventoryIcon, MarketplaceIcon, RentIcon } from "./assets/Icons";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
@@ -22,6 +22,11 @@ export const menuLinks: HeaderMenuLink[] = [
   {
     label: "Rent",
     href: "/rent",
+    icon: <RentIcon />,
+  },
+  {
+    label: "Inventory",
+    href: "/inventory",
     icon: <InventoryIcon />,
   },
 ];
