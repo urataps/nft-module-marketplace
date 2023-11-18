@@ -55,7 +55,7 @@ export default function RentNftDetail({ tokenId }: NftDetailProps) {
                   <Box>
                     <Box>
                       <span className="text-lg ">Duration</span>
-                      <Select className="w-full mt-2 p-2 border bg-sky-900 rounded-md" placeholder="Select option">
+                      <Select className="w-full mt-2 p-2 border bg-sky-300 rounded-md" placeholder="Select option">
                         <option value="option1">1 Day</option>
                         <option value="option2">15 Days</option>
                         <option value="option3">30 Days</option>

@@ -3895,6 +3895,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@gelatonetwork/relay-context@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@gelatonetwork/relay-context@npm:3.2.0"
+  dependencies:
+    "@openzeppelin/contracts": 4.9.3
+  checksum: 63d456a7346f3780c14f97c76ef0b991cf707de741a5e407aa43d1a286a768d99b0b94bc1ae2378da094391b18a04f6cb17d8f327406d8571ca14287d9f9eef0
+  languageName: node
+  linkType: hard
+
 "@heroicons/react@npm:~2.0.11":
   version: 2.0.18
   resolution: "@heroicons/react@npm:2.0.18"
@@ -4858,6 +4867,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@openzeppelin/contracts@npm:4.9.3":
+  version: 4.9.3
+  resolution: "@openzeppelin/contracts@npm:4.9.3"
+  checksum: 4932063e733b35fa7669b9fe2053f69b062366c5c208b0c6cfa1ac451712100c78acff98120c3a4b88d94154c802be05d160d71f37e7d74cadbe150964458838
+  languageName: node
+  linkType: hard
+
 "@openzeppelin/contracts@npm:^5.0.0":
   version: 5.0.0
   resolution: "@openzeppelin/contracts@npm:5.0.0"
@@ -5331,6 +5347,7 @@ __metadata:
   dependencies:
     "@ethersproject/abi": ~5.7.0
     "@ethersproject/providers": ~5.7.1
+    "@gelatonetwork/relay-context": ^3.2.0
     "@matterlabs/hardhat-zksync-solc": ~0.3.17
     "@matterlabs/hardhat-zksync-verify": ~0.1.8
     "@nomicfoundation/hardhat-chai-matchers": ~1.0.3
