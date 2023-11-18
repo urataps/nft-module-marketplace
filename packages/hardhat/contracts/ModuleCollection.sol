@@ -144,6 +144,7 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 		module = _moduleAddresses[moduleId];
 	}
 
+	/// @inheritdoc IERC2981
 	function royaltyInfo(
 		uint256 moduleId,
 		uint256 salePrice
