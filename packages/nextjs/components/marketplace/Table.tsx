@@ -4,29 +4,13 @@ import data from "../../data/data.json";
 import { SafeGlobalLogo } from "../assets/SafeGlobalLogo";
 
 const Table = () => {
-  // const [totalModules, setTotalModules] = React.useState<bigint>();
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   const fetchModuleSupply = async () => {
-  //     const totalSupply = await contract?.read.totalModules();
-  //     setTotalModules(totalSupply);
-  //   };
-  //   fetchModuleSupply();
-  // }, []);
-
-  // const { data: walletClient } = useWalletClient();
-  // const { data: contract } = useScaffoldContract({
-  //   contractName: "ModuleCollection",
-  //   walletClient: walletClient,
-  // });
-
   return (
     <div className="overflow-x-auto">
       <table className="table">
         {/* head */}
         <thead>
           <tr>
+            <th>tokenId</th>
             <th>Name</th>
             <th>Address</th>
             <th>Buy Price</th>
@@ -36,6 +20,7 @@ const Table = () => {
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
+              <td>{item.tokenId}</td>
               <td>
                 <div className="flex items-center gap-3">
                   <div className="avatar">
@@ -50,7 +35,7 @@ const Table = () => {
               <td>{item.price}</td>
               <td>{item.rentingPrice}</td>
               <td>
-                <Link href={`/token/${item.address}`}>
+                <Link href={`/token/${item.tokenId}`}>
                   <button className="btn btn-primary">Details</button>
                 </Link>
               </td>
