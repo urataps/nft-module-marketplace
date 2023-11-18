@@ -1,30 +1,39 @@
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.21;
 
 import { ERC1155URIStorage, ERC1155 } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 import { IERC2981 } from "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
 import { IERC5006 } from "./IERC5006.sol";
+import { IModuleCollection } from "./IModuleCollection.sol";
 
-contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
-	struct RoyaltyInfo {
-		address recipient;
-		uint96 royaltyBps;
-	}
-
-	event ModuleAdded(address indexed module);
-	event ModuleFlagged(address indexed module);
+contract ModuleCollection is
+	IModuleCollection,
+	IERC2981,
+	IERC5006,
+	ERC1155URIStorage,
+	Ownable
+{
+	error ModuleAlreadyAdded();
+	error ModuleURIEmpty();
+	error ModuleNotFound();
+	error MintToZeroAddress();
+	error RecordAlreadyExists();
+	error ApprovedOrOwnerRequired();
+	error OnlyOneModuleAtATime();
+	error ExpiryInFutureRequired();
+	error InsufficientBalance();
+	error RecordNotFound();
 
 	// Module management variables
 	uint256 public totalModules;
-	mapping(address module => uint256 moduleId) private _moduleIds;
-	mapping(uint256 moduleId => address module) private _moduleAddresses;
-	mapping(uint256 moduleId => RoyaltyInfo info) private _royaltyInfos;
+	mapping(address => uint256) private _moduleIds;
+	mapping(uint256 => address) private _moduleAddresses;
+	mapping(uint256 => RoyaltyInfo) private _royaltyInfos;
 
 	// Module renting variables
-	mapping(uint256 recordId => UserRecord record) private _records;
-	mapping(address owner => mapping(uint256 moduleId => uint256 amount))
-		private _frozenAmounts;
+	mapping(uint256 => UserRecord) private _records;
+	mapping(address => mapping(uint256 => uint256)) private _frozenAmounts;
 
 	constructor(address initialOwner) ERC1155("") Ownable(initialOwner) {}
 
@@ -33,8 +42,8 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 		string calldata moduleUri,
 		RoyaltyInfo calldata info
 	) external onlyOwner returns (uint256 moduleId) {
-		require(_moduleIds[module] == 0, "Module already added");
-		require(bytes(moduleUri).length > 0, "Module URI cannot be empty");
+		if (_moduleIds[module] != 0) revert ModuleAlreadyAdded();
+		if (bytes(moduleUri).length == 0) revert ModuleURIEmpty();
 
 		moduleId = totalModules + 1;
 		totalModules = moduleId;
@@ -49,9 +58,8 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 
 	function flagModule(address module) external onlyOwner {
 		uint256 moduleId = _moduleIds[module];
-		require(moduleId != 0, "Module not found");
+		if (moduleId == 0) revert ModuleNotFound();
 
-		// delete only address mapping
 		delete _moduleAddresses[moduleId];
 
 		emit ModuleFlagged(module);
@@ -62,8 +70,8 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 		uint256 moduleId,
 		uint256 amount
 	) external onlyOwner {
-		require(to != address(0), "Cannot mint to zero address");
-		require(_moduleAddresses[moduleId] != address(0), "Module not found");
+		if (to == address(0)) revert MintToZeroAddress();
+		if (_moduleAddresses[moduleId] == address(0)) revert ModuleNotFound();
 
 		_mint(to, moduleId, amount, "");
 	}
@@ -76,12 +84,14 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 		uint64 amount,
 		uint64 expiry
 	) external returns (uint256 recordId) {
-		require(_isApprovedOrOwner(owner), "Not approved or owner");
-		require(amount == 1, "Only 1 module at a time");
-		require(expiry > block.timestamp, "Expiry must be in the future");
-		require(unfrozenBalanceOf(owner, moduleId) > 0, "Insufficient balance");
+		if (!_isApprovedOrOwner(owner)) revert ApprovedOrOwnerRequired();
+		if (amount != 1) revert OnlyOneModuleAtATime();
+		if (expiry <= block.timestamp) revert ExpiryInFutureRequired();
+		if (unfrozenBalanceOf(owner, moduleId) == 0) {
+			revert InsufficientBalance();
+		}
 		recordId = _computeRecordId(user, moduleId);
-		require(_records[recordId].tokenId == 0, "Record already exists");
+		if (_records[recordId].tokenId != 0) revert RecordAlreadyExists();
 
 		_records[recordId] = UserRecord({
 			owner: owner,
@@ -98,7 +108,7 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 	/// @inheritdoc IERC5006
 	function deleteUserRecord(uint256 recordId) external {
 		UserRecord memory record = userRecordOf(recordId);
-		require(_isApprovedOrOwner(record.owner), "Not approved or owner");
+		if (!_isApprovedOrOwner(record.owner)) revert ApprovedOrOwnerRequired();
 
 		_frozenAmounts[record.owner][record.tokenId] -= record.amount;
 		delete _records[recordId];
@@ -184,10 +194,9 @@ contract ModuleCollection is IERC2981, IERC5006, ERC1155URIStorage, Ownable {
 				uint256 moduleId = ids[i];
 				uint256 amount = amounts[i];
 
-				require(
-					amount <= unfrozenBalanceOf(from, moduleId),
-					"Insufficient balance"
-				);
+				if (amount > unfrozenBalanceOf(from, moduleId)) {
+					revert InsufficientBalance();
+				}
 			}
 		}
 		super._update(from, to, ids, amounts);
