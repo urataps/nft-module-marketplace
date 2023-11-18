@@ -57,7 +57,7 @@ contract ModuleCollection is
 		_moduleTimestamps[module].listedAt = uint64(block.timestamp);
 		_setURI(moduleId, moduleUri);
 
-		emit ModuleAdded(module);
+		emit ModuleAdded(module, moduleId);
 	}
 
 	function flagModule(address module) external onlyOwner {

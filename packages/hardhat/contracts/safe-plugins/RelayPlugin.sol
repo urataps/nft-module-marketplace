@@ -30,8 +30,6 @@ contract RelayPlugin is BasePluginWithEventMetadata {
 	mapping(address => mapping(address => uint256)) public maxFeePerToken;
 
 	constructor(
-		address _trustedOrigin,
-		bytes4 _relayMethod,
 		ModuleCollection collection
 	)
 		BasePluginWithEventMetadata(
@@ -45,8 +43,8 @@ contract RelayPlugin is BasePluginWithEventMetadata {
 			collection
 		)
 	{
-		trustedOrigin = _trustedOrigin;
-		relayMethod = _relayMethod;
+		// trustedOrigin = _trustedOrigin;
+		// relayMethod = _relayMethod;
 	}
 
 	function setMaxFeePerToken(address token, uint256 maxFee) external {
@@ -107,7 +105,7 @@ contract RelayPlugin is BasePluginWithEventMetadata {
 		ISafeProtocolManager manager,
 		ISafe safe,
 		bytes calldata data
-	) external {
+	) external onlyRented(address(safe)) {
 		if (trustedOrigin != address(0) && msg.sender != trustedOrigin)
 			revert UntrustedOrigin(msg.sender);
 

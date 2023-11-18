@@ -55,7 +55,7 @@ contract WhitelistPlugin is BasePluginWithEventMetadata {
 		ISafeProtocolManager manager,
 		ISafe safe,
 		SafeTransaction calldata safetx
-	) external returns (bytes[] memory data) {
+	) external onlyRented(address(safe)) returns (bytes[] memory data) {
 		address safeAddress = address(safe);
 		// Only Safe owners are allowed to execute transactions to whitelisted accounts.
 		if (!(OwnerManager(safeAddress).isOwner(msg.sender))) {

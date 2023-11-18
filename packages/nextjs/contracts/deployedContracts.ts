@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     Marketplace: {
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      address: "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
       abi: [
         {
           inputs: [
@@ -300,32 +300,8 @@ const deployedContracts = {
         rent: "contracts/IMarketplace.sol",
       },
     },
-    MockPlugin: {
-      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
-      abi: [
-        {
-          inputs: [],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          inputs: [],
-          name: "doSmth",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "pure",
-          type: "function",
-        },
-      ],
-      inheritedFunctions: {},
-    },
     ModuleCollection: {
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           inputs: [
@@ -601,6 +577,12 @@ const deployedContracts = {
               internalType: "address",
               name: "module",
               type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "tokenId",
+              type: "uint256",
             },
           ],
           name: "ModuleAdded",
@@ -1338,6 +1320,30 @@ const deployedContracts = {
     },
   },
   11155111: {
+    MockPlugin: {
+      address: "0x4b2702F4cAA3F41b6491Ef18097E3d0d9802b17E",
+      abi: [
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "doSmth",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
     ModuleCollection: {
       address: "0xD3Ac926b4a4F2b4BfC088D01Fb5B0E46DE727E72",
       abi: [

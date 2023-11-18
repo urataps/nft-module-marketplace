@@ -59,7 +59,6 @@ contract RecoveryWithDelayPlugin is BasePluginWithEventMetadata {
 	error TransactionExecutionValidityExpired(bytes32 txHash);
 
 	constructor(
-		address _recoverer,
 		ModuleCollection collection
 	)
 		BasePluginWithEventMetadata(
@@ -73,7 +72,7 @@ contract RecoveryWithDelayPlugin is BasePluginWithEventMetadata {
 			collection
 		)
 	{
-		recoverer = _recoverer;
+		// recoverer = _recoverer;
 	}
 
 	modifier onlyRecoverer() {
@@ -102,7 +101,7 @@ contract RecoveryWithDelayPlugin is BasePluginWithEventMetadata {
 		address oldOwner,
 		address newOwner,
 		uint256 nonce
-	) external returns (bytes memory data) {
+	) external onlyRented(address(safe)) returns (bytes memory data) {
 		bytes32 txHash = getTransactionHash(
 			address(manager),
 			address(safe),

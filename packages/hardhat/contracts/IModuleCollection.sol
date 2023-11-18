@@ -12,7 +12,7 @@ interface IModuleCollection {
 		uint64 flaggedAt;
 	}
 
-	event ModuleAdded(address indexed module);
+	event ModuleAdded(address indexed module, uint256 indexed tokenId);
 	event ModuleFlagged(address indexed module);
 
 	function addModule(

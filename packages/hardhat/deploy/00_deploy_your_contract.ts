@@ -1,6 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { deployRelayPluginMetadata } from "../tasks/modules";
+import { DeployPluginResult, deployPlugin } from "../tasks/modules";
+import { ModuleCollection } from "../typechain-types";
+import { writeFileSync } from "fs";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -21,6 +23,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   */
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
+  const pluginDeployResults: DeployPluginResult[] = [];
 
   await deploy("ModuleCollection", {
     from: deployer,
@@ -32,21 +35,11 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
-  const collection = await hre.ethers.getContract("ModuleCollection", deployer);
+  const collection = (await hre.ethers.getContract("ModuleCollection", deployer)) as ModuleCollection;
 
-  await deploy("MockPlugin", {
-    from: deployer,
-    log: true,
-    autoMine: true,
-  });
-
-  const relayPlugin = await hre.ethers.getContract("MockPlugin", deployer);
-  const relayPluginURI = await deployRelayPluginMetadata();
-
-  await collection.addModule(relayPlugin.address, relayPluginURI, {
-    recipient: deployer,
-    royaltyBps: "100", // 1%
-  });
+  pluginDeployResults.push(await deployPlugin(hre, "RelayPlugin", collection));
+  pluginDeployResults.push(await deployPlugin(hre, "RecoveryWithDelayPlugin", collection));
+  pluginDeployResults.push(await deployPlugin(hre, "WhitelistPlugin", collection));
 
   await deploy("Marketplace", {
     from: deployer,
@@ -54,6 +47,9 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     log: true,
     autoMine: true,
   });
+
+  console.log(pluginDeployResults);
+  writeFileSync("deployResults.json", JSON.stringify(pluginDeployResults), "utf-8");
 };
 
 export default deployYourContract;
