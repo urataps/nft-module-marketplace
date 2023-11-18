@@ -2,6 +2,7 @@
 pragma solidity 0.8.21;
 
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { Address } from "@openzeppelin/contracts/utils/Address.sol";
 import { IMarketplace } from "./IMarketplace.sol";
 import { ModuleCollection } from "./ModuleCollection.sol";
 
@@ -41,27 +42,22 @@ contract Marketplace is IMarketplace {
 			owner: params.owner,
 			listingType: params.listingType,
 			price: params.price,
-			currency: params.currency,
 			status: ListingStatus.CREATED
 		});
 
 		emit ListingStatusChanged(listingId, ListingStatus.CREATED);
 	}
 
-	function buy(uint256 listingId) external {
+	function buy(uint256 listingId) external payable {
 		Listing memory listing = _listings[listingId];
 		if (listing.status != ListingStatus.CREATED) revert NotCreated();
 		if (listing.listingType != ListingType.SALE) revert NotSale();
+		if (msg.value < listing.price) revert InsufficientBalance();
 
 		_listings[listingId].status = ListingStatus.COMPLETED;
 
 		emit ListingStatusChanged(listingId, ListingStatus.COMPLETED);
 
-		IERC20(listing.currency).transferFrom(
-			msg.sender,
-			listing.owner,
-			listing.price
-		);
 		moduleCollection.safeTransferFrom(
 			listing.owner,
 			msg.sender,
@@ -69,26 +65,27 @@ contract Marketplace is IMarketplace {
 			1,
 			""
 		);
+		Address.sendValue(payable(listing.owner), listing.price);
+		// todo: refund excess
 	}
 
 	function rent(
 		uint256 listingId,
 		address moduleUser,
 		uint64 duration
-	) external {
+	) external payable {
 		Listing memory listing = _listings[listingId];
 		if (listing.status != ListingStatus.CREATED) revert NotCreated();
 		if (listing.listingType != ListingType.LOAN) revert NotLoan();
+		uint256 rentPrice = (listing.price * duration) / 1 days;
+		if (msg.value < rentPrice) revert InsufficientBalance();
 
 		_listings[listingId].status = ListingStatus.COMPLETED;
 
 		emit ListingStatusChanged(listingId, ListingStatus.COMPLETED);
 
-		IERC20(listing.currency).transferFrom(
-			msg.sender,
-			listing.owner,
-			listing.price * duration
-		);
+		// Price is per day, duration is in seconds
+		Address.sendValue(payable(listing.owner), rentPrice);
 		moduleCollection.createUserRecord(
 			listing.owner,
 			moduleUser,
@@ -96,6 +93,8 @@ contract Marketplace is IMarketplace {
 			1,
 			uint64(block.timestamp) + duration
 		);
+
+		// todo: refund excess
 	}
 
 	function cancel(uint256 listingId) external {

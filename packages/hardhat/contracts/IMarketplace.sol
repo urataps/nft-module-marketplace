@@ -20,8 +20,7 @@ interface IMarketplace {
 		uint256 moduleId;
 		address owner;
 		ListingType listingType;
-		address currency;
-		uint256 price; // pricePerSecond if type is loan
+		uint256 price; // pricePerDay if type is loan
 		uint256 nonce;
 	}
 
@@ -30,7 +29,6 @@ interface IMarketplace {
 		address owner;
 		ListingType listingType;
 		uint256 price;
-		address currency;
 		ListingStatus status;
 	}
 
@@ -50,7 +48,7 @@ interface IMarketplace {
 	 * NOTE: Both parties must approve the marketplace contract beforehand
 	 * @param listingId The ID of the listing.
 	 */
-	function buy(uint256 listingId) external;
+	function buy(uint256 listingId) external payable;
 
 	/**
 	 * @notice Rent a module that must be listed for loan.
@@ -63,7 +61,7 @@ interface IMarketplace {
 		uint256 listingId,
 		address moduleUser,
 		uint64 duration
-	) external;
+	) external payable;
 
 	function cancel(uint256 listingId) external;
 
