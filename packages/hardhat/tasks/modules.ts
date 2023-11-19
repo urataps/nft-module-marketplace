@@ -1,8 +1,8 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { NFTStorage } from "nft.storage";
+// import { NFTStorage } from "nft.storage";
 import { ModuleCollection } from "../typechain-types";
 
-const API_KEY = process.env.NFT_STORAGE_API_KEY || "";
+// const API_KEY = process.env.NFT_STORAGE_API_KEY || "";
 
 export type ModuleProperties = {
   source: string;
@@ -53,10 +53,11 @@ export const deployPlugin = async (
     },
   };
 
-  const client = new NFTStorage({ token: API_KEY });
-  const metadata = await client.store(nftMetadata);
+  // const client = new NFTStorage({ token: API_KEY });
+  // const metadata = await client.store(nftMetadata);
+  const url = "ipfs://bafyreibrpoo5kfkuhknr7ioehhio4jn7m2xkzmq7dm64fv6n2zg4cul4te";
 
-  const tx = await collection.addModule(plugin.address, metadata.url, {
+  const tx = await collection.addModule(plugin.address, url, {
     recipient: deployer.address,
     royaltyBps: 100, // 1%
   });
@@ -71,7 +72,7 @@ export const deployPlugin = async (
     address: plugin.address,
     name: name,
     tokenId: tokenId,
-    metadataURI: metadata.url,
+    metadataURI: url,
     metadata: nftMetadata,
   };
 };

@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  11155111: {
+  31337: {
     Marketplace: {
-      address: "0xEafB0DceBd946faBA361940F5bf6A00f1e02c167",
+      address: "0x34B40BA116d5Dec75548a9e9A8f15411461E8c70",
       abi: [
         {
           inputs: [
@@ -292,7 +292,7 @@ const deployedContracts = {
       },
     },
     ModuleCollection: {
-      address: "0x48302FBD06C5a17855d7DD11ac3812d85C9288b8",
+      address: "0xc96304e3c037f81dA488ed9dEa1D8F2a48278a75",
       abi: [
         {
           inputs: [
@@ -1332,6 +1332,157 @@ const deployedContracts = {
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
+    },
+    SafeProtocolManagerMock: {
+      address: "0xD0141E899a65C95a556fE2B27e5982A6DE7fDD7A",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "contract ModuleCollection",
+              name: "collection",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "plugin",
+              type: "address",
+            },
+            {
+              internalType: "uint8",
+              name: "permissions",
+              type: "uint8",
+            },
+          ],
+          name: "enablePlugin",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "contract ISafe",
+              name: "account",
+              type: "address",
+            },
+            {
+              components: [
+                {
+                  components: [
+                    {
+                      internalType: "address payable",
+                      name: "to",
+                      type: "address",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "value",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "bytes",
+                      name: "data",
+                      type: "bytes",
+                    },
+                  ],
+                  internalType: "struct SafeProtocolAction",
+                  name: "action",
+                  type: "tuple",
+                },
+                {
+                  internalType: "uint256",
+                  name: "nonce",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "metadataHash",
+                  type: "bytes32",
+                },
+              ],
+              internalType: "struct SafeRootAccess",
+              name: "rootAccess",
+              type: "tuple",
+            },
+          ],
+          name: "executeRootAccess",
+          outputs: [
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "contract ISafe",
+              name: "account",
+              type: "address",
+            },
+            {
+              components: [
+                {
+                  components: [
+                    {
+                      internalType: "address payable",
+                      name: "to",
+                      type: "address",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "value",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "bytes",
+                      name: "data",
+                      type: "bytes",
+                    },
+                  ],
+                  internalType: "struct SafeProtocolAction[]",
+                  name: "actions",
+                  type: "tuple[]",
+                },
+                {
+                  internalType: "uint256",
+                  name: "nonce",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "metadataHash",
+                  type: "bytes32",
+                },
+              ],
+              internalType: "struct SafeTransaction",
+              name: "transaction",
+              type: "tuple",
+            },
+          ],
+          name: "executeTransaction",
+          outputs: [
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
     },
   },
 } as const;

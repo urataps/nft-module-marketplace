@@ -54,6 +54,13 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
+  await deploy("SafeProtocolManagerMock", {
+    from: deployer,
+    args: [collection.address],
+    log: true,
+    autoMine: true,
+  });
+
   pluginDeployResults.push(await deployPlugin(hre, "RelayPlugin", collection));
   pluginDeployResults.push(await deployPlugin(hre, "RecoveryWithDelayPlugin", collection));
   pluginDeployResults.push(await deployPlugin(hre, "WhitelistPlugin", collection));

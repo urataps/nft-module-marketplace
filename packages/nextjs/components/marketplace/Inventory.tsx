@@ -5,44 +5,54 @@ import { useWalletClient } from "wagmi";
 import { useScaffoldContract } from "~~/hooks/scaffold-eth";
 
 const Inventory = () => {
-  const [expiresAt, setExpiresAt] = React.useState<string[]>(new Array(data.length).fill("-"));
+  const [expiresAt, setExpiresAt] = React.useState<Array<string>>(new Array(data.length).fill("-"));
   const { data: walletClient } = useWalletClient();
   const { data: collection } = useScaffoldContract({
     contractName: "ModuleCollection",
     walletClient,
   });
+  const { data: manager } = useScaffoldContract({
+    contractName: "SafeProtocolManagerMock",
+    walletClient,
+  });
 
   useEffect(() => {
-    if (walletClient) {
+    if (collection && walletClient) {
+      const getBalanceForPlugin = async (tokenId: bigint) => {
+        const newExpiresAt = [...expiresAt];
+        const balance = await collection.read.balanceOf([walletClient.account.address, tokenId]);
+        if (balance != 0n) {
+          newExpiresAt[parseInt(tokenId.toString()) - 1] = "∞";
+          setExpiresAt(newExpiresAt);
+          return;
+        }
+
+        const usableBalance = await collection.read.usableBalanceOf([walletClient.account.address, tokenId]);
+        if (usableBalance == 0n) return;
+        const recordId = await collection.read.computeRecordId([walletClient.account.address, tokenId]);
+        const record = await collection.read.userRecordOf([recordId]);
+
+        newExpiresAt[parseInt(tokenId.toString()) - 1] = new Date(
+          parseInt(record.expiry.toString()) * 1000,
+        ).toDateString();
+        setExpiresAt(newExpiresAt);
+      };
       data.forEach(item => {
-        getBalanceForPlugin(item.deploymentResult.address);
+        getBalanceForPlugin(BigInt(item.deploymentResult.tokenId));
       });
     }
-  }, []);
+  }, [walletClient]);
 
-  const getBalanceForPlugin = async (pluginAddress: string) => {
-    if (collection && walletClient) {
-      const tokenId = await collection.read.getModuleId([pluginAddress]);
-      const balance = await collection.read.balanceOf([walletClient.account.address, tokenId]);
-      if (balance > 0n) {
-        expiresAt[parseInt(tokenId.toString())] = "∞";
-        setExpiresAt(expiresAt);
-        return;
-      }
-
+  const enable = async (tokenId: bigint) => {
+    if (collection && manager && walletClient) {
+      const address = await collection.read.getModuleAddress([tokenId]);
+      const balanceOf = await collection.read.balanceOf([walletClient.account.address, tokenId]);
       const usableBalance = await collection.read.usableBalanceOf([walletClient.account.address, tokenId]);
-      if (usableBalance == 0n) return;
+      console.log(balanceOf.toString(), usableBalance.toString());
 
-      const recordId = await collection.read.computeRecordId([walletClient.account.address, tokenId]);
-      const record = await collection.read.userRecordOf([recordId]);
-
-      expiresAt[parseInt(tokenId.toString())] = new Date(parseInt(record.expiry.toString())).toDateString();
-      setExpiresAt(expiresAt);
+      // can throw
+      await manager.write.enablePlugin([address, 0]);
     }
-  };
-
-  const enable = async () => {
-    // enable, speak to manager
   };
 
   return (
@@ -73,7 +83,7 @@ const Inventory = () => {
               <td>{item.deploymentResult.address}</td>
               <td>{expiresAt[parseInt(item.deploymentResult.tokenId) - 1]}</td>
               <td>
-                <button onClick={enable} className="btn btn-primary">
+                <button onClick={() => enable(BigInt(item.deploymentResult.tokenId))} className="btn btn-primary">
                   Enable
                 </button>
               </td>
