@@ -11,14 +11,14 @@ contract SafeProtocolManagerMock is ISafeProtocolManager, TokenizedModuleBase {
 	function executeTransaction(
 		ISafe account,
 		SafeTransaction calldata transaction
-	) external onlyRentedCall returns (bytes[] memory data) {
+	) external returns (bytes[] memory data) {
 		// do smth
 	}
 
 	function executeRootAccess(
 		ISafe account,
 		SafeRootAccess calldata rootAccess
-	) external onlyRentedDelegateCall returns (bytes memory data) {
+	) external returns (bytes memory data) {
 		// do smth
 	}
 

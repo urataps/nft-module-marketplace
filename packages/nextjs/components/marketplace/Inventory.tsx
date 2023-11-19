@@ -18,30 +18,33 @@ const Inventory = () => {
 
   useEffect(() => {
     if (collection && walletClient) {
-      const getBalanceForPlugin = async (tokenId: bigint) => {
-        const newExpiresAt = [...expiresAt];
-        const balance = await collection.read.balanceOf([walletClient.account.address, tokenId]);
-        if (balance != 0n) {
-          newExpiresAt[parseInt(tokenId.toString()) - 1] = "∞";
-          setExpiresAt(newExpiresAt);
-          return;
-        }
+      const updateExpiresAt = async () => {
+        const updatedExpiresAt = await Promise.all(
+          data.map(async item => {
+            const tokenId = BigInt(item.deploymentResult.tokenId);
+            const balance = await collection.read.balanceOf([walletClient.account.address, tokenId]);
 
-        const usableBalance = await collection.read.usableBalanceOf([walletClient.account.address, tokenId]);
-        if (usableBalance == 0n) return;
-        const recordId = await collection.read.computeRecordId([walletClient.account.address, tokenId]);
-        const record = await collection.read.userRecordOf([recordId]);
+            if (balance != 0n) {
+              return "∞";
+            }
 
-        newExpiresAt[parseInt(tokenId.toString()) - 1] = new Date(
-          parseInt(record.expiry.toString()) * 1000,
-        ).toDateString();
-        setExpiresAt(newExpiresAt);
+            const usableBalance = await collection.read.usableBalanceOf([walletClient.account.address, tokenId]);
+            if (usableBalance == 0n) {
+              return "-";
+            }
+
+            const recordId = await collection.read.computeRecordId([walletClient.account.address, tokenId]);
+            const record = await collection.read.userRecordOf([recordId]);
+            return new Date(parseInt(record.expiry.toString()) * 1000).toDateString();
+          }),
+        );
+
+        setExpiresAt(updatedExpiresAt);
       };
-      data.forEach(item => {
-        getBalanceForPlugin(BigInt(item.deploymentResult.tokenId));
-      });
+
+      updateExpiresAt();
     }
-  }, [walletClient]);
+  }, [collection, walletClient]);
 
   const enable = async (tokenId: bigint) => {
     if (collection && manager && walletClient) {
@@ -50,7 +53,6 @@ const Inventory = () => {
       const usableBalance = await collection.read.usableBalanceOf([walletClient.account.address, tokenId]);
       console.log(balanceOf.toString(), usableBalance.toString());
 
-      // can throw
       await manager.write.enablePlugin([address, 0]);
     }
   };
