@@ -85,8 +85,8 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
     const saleListingId = await marketplace.computeListingId(saleParams);
     const rentListingId = await marketplace.computeListingId(rentParams);
-    await marketplace.list(saleParams);
-    await marketplace.list(rentParams);
+    await (await marketplace.list(saleParams)).wait();
+    await (await marketplace.list(rentParams)).wait();
 
     pluginInfo.push({
       saleListingId: saleListingId.toString(),
